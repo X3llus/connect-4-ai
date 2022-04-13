@@ -8,6 +8,11 @@ class ConnectGame:
     playerPiece = 1
     turnsTaken = 0
 
+    def reset():
+        board = np.zeros((5,5))
+        playerPiece = 1
+        turnsTaken = 0
+
     def getBoard(self):
         return self.board
     
