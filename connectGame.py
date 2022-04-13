@@ -43,8 +43,6 @@ class ConnectGame:
         else:
             print("Tiny Weenor")
 
-    #Can be passed 1 - 8 for direction, 1 is 12 O-Clock, rest are clockwise -- Use 0 when starting sequence
-    #Use 0 for line count when starting as well
     def __solvingAlgorythm(self, x, y, player):
         foundCount = 0
         for y in range (5):
