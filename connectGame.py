@@ -1,4 +1,5 @@
 from ast import If
+from time import sleep
 from tkinter import END
 import numpy as np
 
@@ -44,24 +45,38 @@ class ConnectGame:
             print("Tiny Weenor")
 
     def __solvingAlgorythm(self, x, y, player):
-        foundCount = 0
-        for y in range (5):
-            for x in range (5):
-                if self.board[x][y] == player:
-                    foundCount += 1
+        dx = 0
+        dy = 1
+        cx = x
+        cy = y
+        rowCount = 0
+
+        # scan direction
+        while True:
+            if rowCount >= 4:
+                return True
+            if cx >= 5 or cx < 0 or cy >= 5 or cy < 0 or self.board[cy][cx] != player:
+                cx = x
+                cy = y
+                rowCount = 0
+                # change direction
+                if dx == 0 and dy == 1:
+                    dx = 1
+                elif dx == 1 and dy == 1:
+                    dy = 0
+                elif dx == 1 and dy == 0:
+                    dy = -1
+                elif dx == 1 and dy == -1:
+                    dx = 0
+                elif dx == 0 and dy == -1:
+                    dx = -1
+                elif dx == -1 and dy == -1:
+                    dy = 0
+                elif dx == -1 and dy == 0:
+                    dy = 1
                 else:
-                    if foundCount > 0:
-                        break
-        if foundCount > 3:
-            return True
-        foundCount = 0
-        for x in range (5):
-            for y in range (5):
-                if self.board[x][y] == player:
-                    foundCount += 1
-                else:
-                    if foundCount > 0:
-                        break
-        if foundCount > 3:
-            return True
-        return False
+                    return False
+                continue
+            rowCount += 1
+            cx += dx
+            cy += dy 
