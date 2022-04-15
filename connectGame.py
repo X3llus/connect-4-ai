@@ -9,34 +9,47 @@ class ConnectGame:
     turnsTaken = 0
     gameOver = False
     turnReward = 0
+    player1score = 0
+    player2score = 0
 
-    def reset():
-        board = np.zeros((5,5))
-        playerPiece = 1
-        turnsTaken = 0
-        gameOver = False
-        turnReward = 0
+    def reset(self):
+        self.board = np.zeros((5,5))
+        self.playerPiece = 1
+        self.turnsTaken = 0
+        self.gameOver = False
+        self.turnReward = 0
+        self.player1score = 0
+        self.player2score = 0
 
     def getBoard(self):
         return self.board
     
+    def getGO(self):
+        return self.gameOver
+
     def playPiece(self, x: list[int]):
         x = x.index(1)
         if x < 0 or x > 4:
-            return False
+            pass
         elif self.board[0][x] == 0:
             self.__placePiece(x)
-            return True
-        else:
-            return False
+            if self.playerPiece == 1:
+                return self.turnReward, self.player1score, True
+            else:
+                return self.turnReward, self.player2score, True
+        return 0, 0, False
             
     def __placePiece(self, x):
         for y in range (4, -1, -1):
             if self.board[y][x] == 0:
                 self.board[y][x] = self.playerPiece
                 if self.__checkSolved(x, y):
-                    turnReward += 10
-                    gameOver = True
+                    self.turnReward += 10
+                    self.gameOver = True
+                    if self.playerPiece == 1:
+                        self.player1score += self.turnReward
+                    else:
+                        self.player2score += self.turnReward
                 self.__swapTurn()
                 return True
         return False
@@ -47,12 +60,12 @@ class ConnectGame:
         else:
             self.playerPiece = 1
         self.turnsTaken += 1
-        turnReward = 0
+        self.turnReward = 0
         print(self.getBoard())
 
     def __checkSolved(self, x, y):
         if self.__solvingAlgorythm(x, y, self.playerPiece) == True:
-            print("Win Player " + self.playerPiece)
+            print("Win Player ", self.playerPiece)
 
     def __solvingAlgorythm(self, x, y, player):
         dx = 0
@@ -65,7 +78,7 @@ class ConnectGame:
         # scan direction
         while True:
             if rowCount >= 4:
-                turnReward = maxCount
+                self.turnReward = maxCount
                 return True
             if cx >= 5 or cx < 0 or cy >= 5 or cy < 0 or self.board[cy][cx] != player:
                 if rowCount > maxCount:
@@ -89,7 +102,7 @@ class ConnectGame:
                 elif dx == -1 and dy == 0:
                     dy = 1
                 else:
-                    turnReward = maxCount
+                    self.turnReward = maxCount
                     return False
                 continue
             rowCount += 1

@@ -20,7 +20,7 @@ class Agent:
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
     def get_state(self, game):
-        state = game.getBoard().flatten(order='C')
+        return game.getBoard().flatten(order='C')
 
     def remember(self, state, action, reward, next_state, game_over):
         self.memory.append((state, action, reward, next_state, game_over)) # will popleft if MAX_MEMORY is reached
@@ -38,12 +38,11 @@ class Agent:
         self.trainer.train_step(state, action, reward, next_state, game_over)
 
     def get_action(self, state):
-        print(state)
         # random moves: tradeoff exploration / exploitation
         self.epsilon = 80 - self.n_games # allowing epsilon to decrease over time
         final_move = [0,0,0,0,0]
         if random.randint(0, 200) < self.epsilon: # randomly generating if move should be random
-            move = random.randint(0, 5) # random value 0-4
+            move = random.randint(0, 4) # random value 0-4
             final_move[move] = 1
         else:
             state0 = torch.tensor(state, dtype=torch.float)

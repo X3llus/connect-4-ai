@@ -1,3 +1,4 @@
+from os import stat
 from connectGame import ConnectGame
 from agent import Agent
 
@@ -9,8 +10,8 @@ def train():
     plot_avg_scores = []
     total_score_1 = 0
     total_score_2 = 0
-    best_score_1 = 0
-    best_score_2 = 0
+    best_score = 0
+    game_over = False
     game = ConnectGame()
     while True:
         if game_over:
@@ -23,7 +24,8 @@ def train():
         final_move = agent1.get_action(state_old)
 
         # perform move and get new state
-        reward, game_over, score = game.playPiece(final_move)
+        reward, score, _ = game.playPiece(final_move)
+        game_over = game.getGO()
         state_new = agent1.get_state(game)
 
         # train short memory
@@ -34,9 +36,11 @@ def train():
 
         if game_over:
             endGame(game_over, game)
-            lastentry = agent2.memory.pop()
-            lastentry = (lastentry[0], lastentry[1], lastentry[2] - 10, lastentry[3], lastentry[4])
-            agent2.memory.append(lastentry)
+            if score > best_score:
+                best_score = score
+                agent1.model.save()
+            agent2.memory = agent1.memory
+            agent2.model = agent1.model
         else:
             # get current state
             state_old = agent2.get_state(game)
@@ -45,7 +49,8 @@ def train():
             final_move = agent2.get_action(state_old)
 
             # perform move and get new state
-            reward, game_over, score = game.playPiece(final_move)
+            reward, score, _ = game.playPiece(final_move)
+            game_over = game.getGO()
             state_new = agent2.get_state(game)
 
             # train short memory
@@ -56,9 +61,11 @@ def train():
 
             if game_over:
                 endGame(game_over, game)
-                lastentry = agent1.memory.pop()
-                lastentry = (lastentry[0], lastentry[1], lastentry[2] - 10, lastentry[3], lastentry[4])
-                agent1.memory.append(lastentry)
+                if score > best_score:
+                    best_score = score
+                    agent2.model.save()
+                agent1.memory = agent2.memory
+                agent1.model = agent2.model
 
 
 
