@@ -3,13 +3,14 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import os
+import numpy as np
 
 class Linear_QNet(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super().__init__()
         self.linear1 = nn.Linear(input_size, hidden_size)
         self.linear2 = nn.Linear(hidden_size, output_size)
-        torch.load('./model/a1model.pth')
+        self.load_state_dict(torch.load('./model/a1model.pth'))
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
@@ -17,7 +18,6 @@ class Linear_QNet(nn.Module):
         return x
 
     def save(self, file_name='model.pth'):
-        print('saving')
         model_folder_path = './model'
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)
@@ -35,7 +35,9 @@ class QTrainer:
         self.criterion = nn.MSELoss()
 
     def train_step(self, state, action, reward, next_state, game_over):
+        state = np.asarray(state)
         state = torch.tensor(state, dtype=torch.float)
+        next_state = np.asarray(next_state)
         next_state = torch.tensor(next_state, dtype=torch.float)
         action = torch.tensor(action, dtype=torch.long)
         reward = torch.tensor(reward, dtype=torch.float)
@@ -68,3 +70,6 @@ class QTrainer:
         loss.backward()
 
         self.optimizer.step()
+        # x = torch.zeros(1, 3, 224, 224, dtype=torch.float, requires_grad=False)
+        # out = resnet(x)
+        # make_dot(out)  # plot graph of variable, not of a nn.Module

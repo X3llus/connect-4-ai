@@ -1,3 +1,4 @@
+import os
 import torch
 import random
 import numpy as np
@@ -20,7 +21,7 @@ class Agent:
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
     def get_state(self, game):
-        return game.getBoard().flatten(order='C')
+        return np.array(game.getBoard().flatten(order='C'), dtype=int)
 
     def remember(self, state, action, reward, next_state, game_over):
         self.memory.append((state, action, reward, next_state, game_over)) # will popleft if MAX_MEMORY is reached

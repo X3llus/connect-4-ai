@@ -1,6 +1,3 @@
-from ast import If
-from time import sleep
-from tkinter import END
 import numpy as np
 
 class ConnectGame:
@@ -32,10 +29,9 @@ class ConnectGame:
             return 0, True, 0, False
         elif self.board[0][x] == 0:
             self.__placePiece(x)
-            if self.playerPiece == 1:
-                return self.turnReward, self.game_over, self.turnsTaken, True
-            # else:
-            #     return self.turnReward, self.game_over, self.player2score, True
+            # if self.playerPiece == 1:
+            return self.turnReward, self.game_over, self.turnsTaken, True
+            
         return 0, False, 0, False
 
     def __placePiece(self, x):
@@ -43,7 +39,7 @@ class ConnectGame:
             if self.board[y][x] == 0:
                 self.board[y][x] = self.playerPiece
                 if self.__solvingAlgorythm(x, y, self.playerPiece):
-                    print("Win Player ", self.playerPiece)
+                    print('win Player', self.playerPiece, 'In', self.turnsTaken, 'turns', '\n', self.board, flush=True)
                     self.turnReward += 10
                     self.turnReward += round(13 - (self.turnsTaken / 2))
                     self.game_over = True
@@ -61,7 +57,6 @@ class ConnectGame:
 
         self.turnsTaken += 1
         self.turnReward = 0
-        print(self.getBoard())
 
     def __solvingAlgorythm(self, x, y, player):
         dx = 0
