@@ -7,11 +7,15 @@ class ConnectGame:
     board = np.zeros((5,5))
     playerPiece = 1
     turnsTaken = 0
+    gameOver = False
+    turnReward = 0
 
     def reset():
         board = np.zeros((5,5))
         playerPiece = 1
         turnsTaken = 0
+        gameOver = False
+        turnReward = 0
 
     def getBoard(self):
         return self.board
@@ -30,7 +34,8 @@ class ConnectGame:
             if self.board[y][x] == 0:
                 self.board[y][x] = self.playerPiece
                 if self.__checkSolved(x, y):
-                    exit()
+                    turnReward += 10
+                    gameOver = True
                 self.__swapTurn()
                 return True
         return False
@@ -41,13 +46,12 @@ class ConnectGame:
         else:
             self.playerPiece = 1
         self.turnsTaken += 1
+        turnReward = 0
         print(self.getBoard())
 
     def __checkSolved(self, x, y):
         if self.__solvingAlgorythm(x, y, self.playerPiece) == True:
-            print("Weenor")
-        else:
-            print("Tiny Weenor")
+            print("Win Player " + self.playerPiece)
 
     def __solvingAlgorythm(self, x, y, player):
         dx = 0
@@ -60,7 +64,8 @@ class ConnectGame:
         # scan direction
         while True:
             if rowCount >= 4:
-                return True, 4
+                turnReward = maxCount
+                return True
             if cx >= 5 or cx < 0 or cy >= 5 or cy < 0 or self.board[cy][cx] != player:
                 if rowCount > maxCount:
                     maxCount = rowCount
@@ -83,7 +88,8 @@ class ConnectGame:
                 elif dx == -1 and dy == 0:
                     dy = 1
                 else:
-                    return False, maxCount
+                    turnReward = maxCount
+                    return False
                 continue
             rowCount += 1
             cx += dx
