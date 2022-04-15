@@ -1,6 +1,6 @@
 import numpy as np
 
-class ConnectGame:
+class Game:
     board = np.zeros((5,5))
     playerPiece = 1
     turnsTaken = 0
@@ -25,14 +25,13 @@ class ConnectGame:
         x = x.index(1)
         if x < 0 or x > 4:
             pass
-        elif np.all(self.board != 0):
-            return 0, True, 0, False
-        elif self.board[0][x] == 0:
+        if np.all(self.board != 0):
+            # Cats game
+            return 0, True, self.turnsTaken, False
+        if self.board[0][x] == 0:
             self.__placePiece(x)
-            # if self.playerPiece == 1:
             return self.turnReward, self.game_over, self.turnsTaken, True
-            
-        return 0, False, 0, False
+        return -10, False, self.turnsTaken, False
 
     def __placePiece(self, x):
         for y in range (4, -1, -1):
