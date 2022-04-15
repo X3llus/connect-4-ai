@@ -7,7 +7,7 @@ class ConnectGame:
     board = np.zeros((5,5))
     playerPiece = 1
     turnsTaken = 0
-    gameOver = False
+    game_over = False
     turnReward = 0
     player1score = 0
     player2score = 0
@@ -16,40 +16,37 @@ class ConnectGame:
         self.board = np.zeros((5,5))
         self.playerPiece = 1
         self.turnsTaken = 0
-        self.gameOver = False
+        self.game_over = False
         self.turnReward = 0
         self.player1score = 0
         self.player2score = 0
 
     def getBoard(self):
         return self.board
-    
-    def getGO(self):
-        return self.gameOver
 
     def playPiece(self, x: list[int]):
         x = x.index(1)
         if x < 0 or x > 4:
             pass
+        elif np.all(self.board != 0):
+            return 0, True, 0, False
         elif self.board[0][x] == 0:
             self.__placePiece(x)
             if self.playerPiece == 1:
-                return self.turnReward, self.player1score, True
-            else:
-                return self.turnReward, self.player2score, True
-        return 0, 0, False
-            
+                return self.turnReward, self.game_over, self.turnsTaken, True
+            # else:
+            #     return self.turnReward, self.game_over, self.player2score, True
+        return 0, False, 0, False
+
     def __placePiece(self, x):
         for y in range (4, -1, -1):
             if self.board[y][x] == 0:
                 self.board[y][x] = self.playerPiece
-                if self.__checkSolved(x, y):
+                if self.__solvingAlgorythm(x, y, self.playerPiece):
+                    print("Win Player ", self.playerPiece)
                     self.turnReward += 10
-                    self.gameOver = True
-                    if self.playerPiece == 1:
-                        self.player1score += self.turnReward
-                    else:
-                        self.player2score += self.turnReward
+                    self.turnReward += round(13 - (self.turnsTaken / 2))
+                    self.game_over = True
                 self.__swapTurn()
                 return True
         return False
@@ -57,15 +54,14 @@ class ConnectGame:
     def __swapTurn(self):
         if self.playerPiece == 1:
             self.playerPiece = 2
+            self.player1score += self.turnReward
         else:
             self.playerPiece = 1
+            self.player2score += self.turnReward
+
         self.turnsTaken += 1
         self.turnReward = 0
         print(self.getBoard())
-
-    def __checkSolved(self, x, y):
-        if self.__solvingAlgorythm(x, y, self.playerPiece) == True:
-            print("Win Player ", self.playerPiece)
 
     def __solvingAlgorythm(self, x, y, player):
         dx = 0

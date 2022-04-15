@@ -9,6 +9,7 @@ class Linear_QNet(nn.Module):
         super().__init__()
         self.linear1 = nn.Linear(input_size, hidden_size)
         self.linear2 = nn.Linear(hidden_size, output_size)
+        torch.load('./model/a1model.pth')
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
@@ -16,6 +17,7 @@ class Linear_QNet(nn.Module):
         return x
 
     def save(self, file_name='model.pth'):
+        print('saving')
         model_folder_path = './model'
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)

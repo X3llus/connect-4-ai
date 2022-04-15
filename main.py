@@ -24,8 +24,8 @@ def train():
         final_move = agent1.get_action(state_old)
 
         # perform move and get new state
-        reward, score, _ = game.playPiece(final_move)
-        game_over = game.getGO()
+        reward, game_over, score, _ = game.playPiece(final_move)
+        # game_over = game.getGO()
         state_new = agent1.get_state(game)
 
         # train short memory
@@ -35,10 +35,11 @@ def train():
         agent1.remember(state_old, final_move, reward, state_new, game_over)
 
         if game_over:
-            endGame(game_over, game)
-            if score > best_score:
+            endGame(game)
+            print(score, best_score)
+            if score <= best_score:
                 best_score = score
-                agent1.model.save()
+                agent1.model.save("a1model.pth")
             agent2.memory = agent1.memory
             agent2.model = agent1.model
         else:
@@ -49,8 +50,8 @@ def train():
             final_move = agent2.get_action(state_old)
 
             # perform move and get new state
-            reward, score, _ = game.playPiece(final_move)
-            game_over = game.getGO()
+            reward, game_over, score, _ = game.playPiece(final_move)
+            # game_over = game.getGO()
             state_new = agent2.get_state(game)
 
             # train short memory
@@ -60,17 +61,14 @@ def train():
             agent2.remember(state_old, final_move, reward, state_new, game_over)
 
             if game_over:
-                endGame(game_over, game)
-                if score > best_score:
+                endGame(game)
+                if score <= best_score:
                     best_score = score
-                    agent2.model.save()
+                    agent2.model.save("a2model.pth")
                 agent1.memory = agent2.memory
                 agent1.model = agent2.model
 
-
-
-
-def endGame(game_over, game):
+def endGame(game):
         # train long memory (replay memory), plot result
         game.reset()
         agent1.n_games += 1
@@ -78,15 +76,7 @@ def endGame(game_over, game):
         agent2.n_games += 1
         agent2.train_long_memory()
 
-        if agent1.score > agent1.best_score:
-            agent1.best_score = agent1.score
-            agent1.model.save("a1model.pth")
-
-        if agent2.score > agent2.best_score:
-            agent2.best_score = agent2.score
-            agent2.model.save("a2model.pth")
-
-        print('Game', agent1.n_games, 'Agent 1 Score: ', agent1.score, 'Agent 1 Best Score: ', agent1.best_score, 'Agent 2 Score: ', agent2.score, 'Agent 2 Best Score: ', agent2.best_score)
+        print('Game', agent1.n_games)
 
         # TODO: plot
 
