@@ -1,21 +1,23 @@
 from os import stat
 from connectGame import ConnectGame
 from agent import Agent
+from helper import plot
 
 agent1 = Agent()
 agent2 = Agent()
+plot_scores = []
+plot_avg_scores = []
 
 def train():
-    plot_scores = []
-    plot_avg_scores = []
-    total_score_1 = 0
-    total_score_2 = 0
-    best_score = 0
     game_over = False
+    best_score = 0
+    total_score = 0
     game = ConnectGame()
     while True:
         if game_over:
             game.reset()
+            if score != 0:
+                plotGame(score, total_score)
 
         # get current state
         state_old = agent1.get_state(game)
@@ -36,7 +38,6 @@ def train():
 
         if game_over:
             endGame(game)
-            print(score, best_score)
             if score <= best_score:
                 best_score = score
                 agent1.model.save("a1model.pth")
@@ -78,7 +79,12 @@ def endGame(game):
 
         print('Game', agent1.n_games)
 
-        # TODO: plot
+def plotGame(score, total_score):
+    plot_scores.append(score)
+    total_score += score
+    mean_score = total_score / agent1.n_games
+    plot_avg_scores.append(mean_score)
+    plot(plot_scores, plot_avg_scores)
 
 if __name__ == '__main__':
     train()
