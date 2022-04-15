@@ -55,12 +55,15 @@ class ConnectGame:
         cx = x
         cy = y
         rowCount = 0
+        maxCount = 0
 
         # scan direction
         while True:
             if rowCount >= 4:
-                return True
+                return True, 4
             if cx >= 5 or cx < 0 or cy >= 5 or cy < 0 or self.board[cy][cx] != player:
+                if rowCount > maxCount:
+                    maxCount = rowCount
                 cx = x
                 cy = y
                 rowCount = 0
@@ -80,7 +83,7 @@ class ConnectGame:
                 elif dx == -1 and dy == 0:
                     dy = 1
                 else:
-                    return False
+                    return False, maxCount
                 continue
             rowCount += 1
             cx += dx
