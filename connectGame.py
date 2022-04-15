@@ -20,7 +20,8 @@ class ConnectGame:
     def getBoard(self):
         return self.board
     
-    def playPiece(self, x):
+    def playPiece(self, x: list[int]):
+        x = x.index(1)
         if x < 0 or x > 4:
             return False
         elif self.board[0][x] == 0:
