@@ -6,11 +6,11 @@ import os
 import numpy as np
 
 class Linear_QNet(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size):
+    def __init__(self, input_size, hidden_size_one, hidden_size_two, output_size):
         super().__init__()
-        self.linear1 = nn.Linear(input_size, hidden_size)
-        self.linear2 = nn.Linear(hidden_size, hidden_size)
-        self.linear3 = nn.Linear(hidden_size, output_size)
+        self.linear1 = nn.Linear(input_size, hidden_size_one)
+        self.linear2 = nn.Linear(hidden_size_one, hidden_size_two)
+        self.linear3 = nn.Linear(hidden_size_two, output_size)
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
