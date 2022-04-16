@@ -7,6 +7,7 @@ from helper import plot
 
 
 def train():
+    MAX_GAMES = 1000
     agent1 = Agent()
     agent2 = Agent()
     plot_scores = []
@@ -32,7 +33,7 @@ def train():
         plot(plot_scores, plot_avg_scores)
 
     while True:
-        # if agent1.n_games >= 1000:
+        # if agent1.n_games >= MAX_GAMES:
         #     return
         # -----------------------------------------
         # Agent One
