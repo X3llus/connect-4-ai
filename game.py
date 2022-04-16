@@ -31,32 +31,31 @@ class Game:
             # Cats game
             return 0, True, self.turnsTaken, True
         if self.board[0][x] == 0:
-            self.__placePiece(x)
-            return self.turnReward, self.game_over, self.turnsTaken, True
-        return 0, False, self.turnsTaken, False
+            _, turnReward = self.__placePiece(x)
+            self.turnReward += turnReward
+            self.__swapTurn()
+            return turnReward, self.game_over, self.turnsTaken, True
+        return -50, False, self.turnsTaken, False
 
     def __placePiece(self, x):
+        turnReward = 0
         for y in range (4, -1, -1):
             if self.board[y][x] == 0:
                 self.board[y][x] = self.playerPiece
                 if self.__solvingAlgorythm(x, y, self.playerPiece):
-                    print('win Player', self.playerPiece, 'In', self.turnsTaken, 'turns', '\n', self.board, flush=True)
-                    self.turnReward += 15
-                    # self.turnReward += round(13 - (self.turnsTaken / 2))
-
+                    # print('win Player', self.playerPiece, 'In', self.turnsTaken, 'turns', '\n', self.board, flush=True)
+                    turnReward += 30
                     self.game_over = True
 
                 numBlocked = self.__blockingAlgorythm(x, y, self.playerPiece)
 
                 if numBlocked == 2:
-                    self.turnReward += 10
+                    turnReward += 10
 
                 if numBlocked == 3:
-                    self.turnReward += 20
-
-                self.__swapTurn()
-                return True
-        return False
+                    turnReward += 20
+                return True, turnReward
+        return False, turnReward
 
     def __swapTurn(self):
         if self.playerPiece == 1:
@@ -112,7 +111,7 @@ class Game:
             cy += dy 
 
     def __blockingAlgorythm(self, x, y, player) -> int:
-        enemyPiece = lambda player : 1 if (player == 2) else 2 
+        enemyPiece = (lambda player : 1 if (player == 2) else 2)(player)
         dx = 0
         dy = 1
         cx = x + dx
@@ -122,9 +121,9 @@ class Game:
 
         # scan direction
         while True:
-            if rowCount >= 4:
+            if rowCount >= 3:
                 self.turnReward = maxCount
-                return True
+                return rowCount
             if cx >= 5 or cx < 0 or cy >= 5 or cy < 0 or self.board[cy][cx] != enemyPiece:
                 if rowCount > maxCount:
                     maxCount = rowCount
@@ -148,7 +147,7 @@ class Game:
                     dy = 1
                 else:
                     self.turnReward = maxCount
-                    return False
+                    return maxCount
                 continue
             rowCount += 1
             cx += dx

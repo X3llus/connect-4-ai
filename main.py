@@ -5,10 +5,9 @@ from game import Game
 from agent import Agent
 from helper import plot
 
-
 def train():
-    agent1 = Agent()
-    agent2 = Agent()
+    agent1 = Agent(file_name='./model/a1model.pth')
+    agent2 = Agent(file_name='./model/a2model.pth')
     a1_reward_total = 0
     a1_rewards = []
     a2_reward_total = 0
@@ -16,7 +15,7 @@ def train():
     plot_scores = []
     plot_avg_scores = []
     game_over = False
-    best_score = 100
+    best_score = 0
     total_score = 0
     game = Game()
 
@@ -47,7 +46,7 @@ def train():
         final_move = agent1.get_action(state_old)
 
         # perform move and get new state
-        reward, game_over, score, _ = game.playPiece(final_move)
+        reward, game_over, score, played = game.playPiece(final_move)
         state_new = agent1.get_state(game)
 
         a1_reward_total += reward

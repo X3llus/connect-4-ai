@@ -27,8 +27,6 @@ def train():
             
 
     while True:
-        # if agent1.n_games >= 1000:
-        #     return
         # -----------------------------------------
         # Agent One
         # -----------------------------------------
@@ -39,7 +37,11 @@ def train():
         final_move = agent1.get_action(state_old)
 
         # perform move and get new state
-        reward, game_over, score, _ = game.playPiece(final_move)
+        reward, game_over, score, played = game.playPiece(final_move)
+        while not played:
+            final_move = agent1.get_action(state_old)
+            reward, game_over, score, played = game.playPiece(final_move)
+
         state_new = agent1.get_state(game)
 
         # train short memory
@@ -53,7 +55,7 @@ def train():
             total_score += score
             if score <= best_score:
                 best_score = score
-                agent1.model.save('a1model.pth')
+                # agent1.model.save('a1model.pth')
             game.reset()
             continue
 
@@ -63,9 +65,12 @@ def train():
 
         printBoard(game.getBoard())
         userIn = int(input("Enter column to place piece in (1-5): "))
-        while not game.playPiece(userIn - 1):
+        _, game_over, _, played = game.playPiece(userIn - 1)
+        while not played:
             print("Piece not able to be placed, check that you're entering 1-5 and not dropping in a full column")
             userIn = int(input("Enter column to place piece in (1-5)"))
+            _, game_over, _, played = game.playPiece(userIn - 1)
+
         if game_over:
             losingMove = agent1.memory.pop()
             agent1.memory.append((losingMove[0], losingMove[1], -20, losingMove[3], losingMove[4]))

@@ -12,12 +12,13 @@ LR = 0.001
 
 class Agent:
     
-    def __init__(self):
+    def __init__(self, file_name='./model/a1model.pth'):
         self.n_games = 0
         self.epsilon = 0 #randomness
         self.gamma = 0.9 #discount rate
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
         self.model = Linear_QNet(25, 256, 5)
+        self.model.load_state_dict(torch.load(file_name))
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
     def get_state(self, game):
@@ -40,9 +41,9 @@ class Agent:
 
     def get_action(self, state):
         # random moves: tradeoff exploration / exploitation
-        self.epsilon = 200 - self.n_games # allowing epsilon to decrease over time
+        self.epsilon = 1000 - self.n_games # allowing epsilon to decrease over time
         final_move = [0,0,0,0,0]
-        if random.randint(0, 200) < self.epsilon: # randomly generating if move should be random
+        if random.randint(0, 1000) < self.epsilon: # randomly generating if move should be random
             move = random.randint(0, 4) # random value 0-4
             final_move[move] = 1
         else:
