@@ -32,8 +32,8 @@ def train():
         plot(plot_scores, plot_avg_scores)
 
     while True:
-        if agent1.n_games >= 200:
-            return
+        # if agent1.n_games >= 1000:
+        #     return
         # -----------------------------------------
         # Agent One
         # -----------------------------------------

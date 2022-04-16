@@ -39,18 +39,19 @@ class Game:
                 self.board[y][x] = self.playerPiece
                 if self.__solvingAlgorythm(x, y, self.playerPiece):
                     print('win Player', self.playerPiece, 'In', self.turnsTaken, 'turns', '\n', self.board, flush=True)
-                    self.turnReward += 20
-                    self.turnReward += round(13 - (self.turnsTaken / 2))
-
-                    numBlocked = self.__blockingAlgorythm(x, y, self.playerPiece)
-
-                    if numBlocked == 2:
-                        self.turnReward += 5
-
-                    if numBlocked == 3:
-                        self.turnReward += 10
+                    self.turnReward += 15
+                    # self.turnReward += round(13 - (self.turnsTaken / 2))
 
                     self.game_over = True
+
+                numBlocked = self.__blockingAlgorythm(x, y, self.playerPiece)
+
+                if numBlocked == 2:
+                    self.turnReward += 10
+
+                if numBlocked == 3:
+                    self.turnReward += 20
+
                 self.__swapTurn()
                 return True
         return False
