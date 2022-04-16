@@ -39,8 +39,17 @@ class Game:
                 self.board[y][x] = self.playerPiece
                 if self.__solvingAlgorythm(x, y, self.playerPiece):
                     print('win Player', self.playerPiece, 'In', self.turnsTaken, 'turns', '\n', self.board, flush=True)
-                    self.turnReward += 10
+                    self.turnReward += 20
                     self.turnReward += round(13 - (self.turnsTaken / 2))
+
+                    numBlocked = self.__blockingAlgorythm(x, y, self.playerPiece)
+
+                    if numBlocked == 2:
+                        self.turnReward += 5
+
+                    if numBlocked == 3:
+                        self.turnReward += 10
+
                     self.game_over = True
                 self.__swapTurn()
                 return True
@@ -75,6 +84,49 @@ class Game:
                     maxCount = rowCount
                 cx = x
                 cy = y
+                rowCount = 0
+                # change direction
+                if dx == 0 and dy == 1:
+                    dx = 1
+                elif dx == 1 and dy == 1:
+                    dy = 0
+                elif dx == 1 and dy == 0:
+                    dy = -1
+                elif dx == 1 and dy == -1:
+                    dx = 0
+                elif dx == 0 and dy == -1:
+                    dx = -1
+                elif dx == -1 and dy == -1:
+                    dy = 0
+                elif dx == -1 and dy == 0:
+                    dy = 1
+                else:
+                    self.turnReward = maxCount
+                    return False
+                continue
+            rowCount += 1
+            cx += dx
+            cy += dy 
+
+    def __blockingAlgorythm(self, x, y, player) -> int:
+        enemyPiece = lambda player : 1 if (player == 2) else 2 
+        dx = 0
+        dy = 1
+        cx = x + dx
+        cy = y + dy
+        rowCount = 0
+        maxCount = 0
+
+        # scan direction
+        while True:
+            if rowCount >= 4:
+                self.turnReward = maxCount
+                return True
+            if cx >= 5 or cx < 0 or cy >= 5 or cy < 0 or self.board[cy][cx] != enemyPiece:
+                if rowCount > maxCount:
+                    maxCount = rowCount
+                cx = x + dx
+                cy = y + dy
                 rowCount = 0
                 # change direction
                 if dx == 0 and dy == 1:
