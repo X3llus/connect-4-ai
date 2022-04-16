@@ -31,7 +31,7 @@ class Game:
         if self.board[0][x] == 0:
             self.__placePiece(x)
             return self.turnReward, self.game_over, self.turnsTaken, True
-        return -10, False, self.turnsTaken, False
+        return 0, False, self.turnsTaken, False
 
     def __placePiece(self, x):
         for y in range (4, -1, -1):
