@@ -60,7 +60,8 @@ def train():
             if score <= best_score:
                 best_score = score
                 agent1.model.save('a1model.pth')
-            agent2.remember(state_old, [1, 0, 0, 0, 0], -10, state_new, game_over)
+            losingMove = agent2.memory.pop()
+            agent2.memory.append((losingMove[0], losingMove[1], -20, losingMove[3], losingMove[4]))
             game.reset()
             continue
 
@@ -90,7 +91,8 @@ def train():
             if score <= best_score:
                 best_score = score
                 agent2.model.save('a2model.pth')
-            agent1.remember(state_old, [1, 0, 0, 0, 0], -10, state_new, game_over)
+            losingMove = agent1.memory.pop()
+            agent1.memory.append((losingMove[0], losingMove[1], -20, losingMove[3], losingMove[4]))
             game.reset()
 
 if __name__ == '__main__':
