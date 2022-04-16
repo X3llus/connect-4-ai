@@ -75,6 +75,8 @@ class Game:
         cy = y
         rowCount = 0
         maxCount = 0
+        axisCount = [0, 0, 0, 0]
+        axis = 0
 
         # scan direction
         while True:
@@ -87,6 +89,9 @@ class Game:
                 cx = x
                 cy = y
                 rowCount = 0
+                axis += 1
+                if axis == 4:
+                    axis = 0
                 # change direction
                 if dx == 0 and dy == 1:
                     dx = 1
@@ -103,10 +108,13 @@ class Game:
                 elif dx == -1 and dy == 0:
                     dy = 1
                 else:
-                    self.turnReward = maxCount
+                    # Check the highest axis count
+                    self.turnReward = max(axisCount) - 1
+                    if 5 in axisCount: return True
                     return False
                 continue
             rowCount += 1
+            axisCount[axis] += 1
             cx += dx
             cy += dy 
 
@@ -118,6 +126,8 @@ class Game:
         cy = y + dy
         rowCount = 0
         maxCount = 0
+        axisCount = [0, 0, 0, 0]
+        axis = 0
 
         # scan direction
         while True:
@@ -130,6 +140,9 @@ class Game:
                 cx = x + dx
                 cy = y + dy
                 rowCount = 0
+                axis += 1
+                if axis == 4:
+                    axis = 0
                 # change direction
                 if dx == 0 and dy == 1:
                     dx = 1
@@ -146,8 +159,9 @@ class Game:
                 elif dx == -1 and dy == 0:
                     dy = 1
                 else:
-                    self.turnReward = maxCount
-                    return maxCount
+                    self.turnReward = max(axisCount) - 1
+                    if 5 in axisCount: return True
+                    return False
                 continue
             rowCount += 1
             cx += dx

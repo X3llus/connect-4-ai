@@ -61,7 +61,7 @@ def train():
         if game_over:
             endGame(game)
             total_score += score
-            plotGame(score, total_score, a1_reward_total, a2_reward_total)
+            # plotGame(score, total_score, a1_reward_total, a2_reward_total)
             if a1_reward_total >= best_score:
                 best_score = a1_reward_total
                 agent1.model.save('a1model.pth')
@@ -96,7 +96,7 @@ def train():
         if game_over:
             endGame(game)
             total_score += score
-            plotGame(score, total_score, a1_reward_total, a2_reward_total)
+            # plotGame(score, total_score, a1_reward_total, a2_reward_total)
             if a2_reward_total >= best_score:
                 best_score = score
                 agent2.model.save('a2model.pth')
