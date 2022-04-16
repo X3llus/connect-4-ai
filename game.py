@@ -1,3 +1,4 @@
+from re import I
 import numpy as np
 
 class Game:
@@ -21,13 +22,14 @@ class Game:
     def getBoard(self):
         return self.board
 
-    def playPiece(self, x: list[int]):
-        x = x.index(1)
+    def playPiece(self, x):
+        if isinstance(x, list):
+            x = x.index(1)
         if x < 0 or x > 4:
-            pass
+            return 0, False, self.turnsTaken, False
         if np.all(self.board != 0):
             # Cats game
-            return 0, True, self.turnsTaken, False
+            return 0, True, self.turnsTaken, True
         if self.board[0][x] == 0:
             self.__placePiece(x)
             return self.turnReward, self.game_over, self.turnsTaken, True
