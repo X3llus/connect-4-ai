@@ -6,8 +6,8 @@ from agent import Agent
 from helper import plot
 
 def train():
-    agent1 = Agent(file_name='./model/a1model.pth')
-    agent2 = Agent(file_name='./model/a2model.pth')
+    agent1 = Agent(file_name='./model/a1model-deep.pth')
+    agent2 = Agent(file_name='./model/a2model-deep.pth')
     a1_reward_total = 0
     a1_rewards = []
     a2_reward_total = 0
@@ -64,7 +64,7 @@ def train():
             # plotGame(score, total_score, a1_reward_total, a2_reward_total)
             if a1_reward_total >= best_score:
                 best_score = a1_reward_total
-                agent1.model.save('a1model.pth')
+                agent1.model.save('a1model-deep.pth')
             losingMove = agent2.memory.pop()
             agent2.memory.append((losingMove[0], losingMove[1], -20, losingMove[3], losingMove[4]))
             a1_reward_total = 0
@@ -99,7 +99,7 @@ def train():
             # plotGame(score, total_score, a1_reward_total, a2_reward_total)
             if a2_reward_total >= best_score:
                 best_score = score
-                agent2.model.save('a2model.pth')
+                agent2.model.save('a2model-deep.pth')
             losingMove = agent1.memory.pop()
             agent1.memory.append((losingMove[0], losingMove[1], -20, losingMove[3], losingMove[4]))
             a1_reward_total = 0

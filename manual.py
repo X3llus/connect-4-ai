@@ -8,7 +8,7 @@ from getpass import getpass
 
 def main():
     os.system('Connect 4!')
-    agent1 = Agent()
+    agent1 = Agent('./model/a1model-deep.pth')
     game_over = False
     best_score = 0
     total_score = 0
@@ -31,9 +31,9 @@ def main():
                 if piece == 0:
                     row.append('⚪')
                 if piece == 1:
-                    row.append('🔴')
-                if piece == 2:
                     row.append('⚫')
+                if piece == 2:
+                    row.append('🔴')
             table.add_row(*row)
         console.print(table, style='default on blue')
             

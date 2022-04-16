@@ -17,8 +17,9 @@ class Agent:
         self.epsilon = 0 #randomness
         self.gamma = 0.9 #discount rate
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
-        self.model = Linear_QNet(25, 256, 5)
-        self.model.load_state_dict(torch.load(file_name))
+        self.model = Linear_QNet(25, 25, 5)
+        if os.path.exists(file_name):
+            self.model.load_state_dict(torch.load(file_name))
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
     def get_state(self, game):

@@ -140,9 +140,6 @@ class Game:
                 cx = x + dx
                 cy = y + dy
                 rowCount = 0
-                axis += 1
-                if axis == 4:
-                    axis = 0
                 # change direction
                 if dx == 0 and dy == 1:
                     dx = 1
@@ -159,9 +156,8 @@ class Game:
                 elif dx == -1 and dy == 0:
                     dy = 1
                 else:
-                    self.turnReward = max(axisCount) - 1
-                    if 5 in axisCount: return True
-                    return False
+                    self.turnReward = maxCount
+                    return maxCount
                 continue
             rowCount += 1
             cx += dx
