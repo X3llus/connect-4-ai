@@ -1,6 +1,3 @@
-from os import stat
-import os
-from time import sleep
 from game import Game
 from agent import Agent
 from helper import plot
@@ -96,7 +93,7 @@ def train():
         if game_over:
             endGame(game)
             total_score += score
-            # plotGame(score, total_score, a1_reward_total, a2_reward_total)
+            plotGame(score, total_score, a1_reward_total, a2_reward_total)
             if a2_reward_total >= best_score:
                 best_score = score
                 agent2.model.save('a2model-deep.pth')

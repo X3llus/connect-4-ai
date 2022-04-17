@@ -14,7 +14,7 @@ class Linear_QNet(nn.Module):
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
-        x = F.relu(self.linear2(x))
+        x = self.linear2(x)
         x = self.linear3(x)
         return x
 
@@ -62,14 +62,7 @@ class QTrainer:
 
             target[idx][torch.argmax(action[idx]).item()] = Q_new
     
-        # 2: Q_new = r + y * max(next_predicted Q value) -> only do this if not game_over
-        # pred.clone()
-        # preds[argmax(action)] = Q_new
         self.optimizer.zero_grad()
         loss = self.criterion(target, pred)
         loss.backward()
-
         self.optimizer.step()
-        # x = torch.zeros(1, 3, 224, 224, dtype=torch.float, requires_grad=False)
-        # out = resnet(x)
-        # make_dot(out)  # plot graph of variable, not of a nn.Module

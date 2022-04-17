@@ -1,4 +1,3 @@
-from re import I
 import numpy as np
 
 class Game:
@@ -43,7 +42,7 @@ class Game:
             if self.board[y][x] == 0:
                 self.board[y][x] = self.playerPiece
                 if self.__solvingAlgorythm(x, y, self.playerPiece):
-                    # print('win Player', self.playerPiece, 'In', self.turnsTaken, 'turns', '\n', self.board, flush=True)
+                    print('win Player', self.playerPiece, 'In', self.turnsTaken, 'turns', '\n', self.board, flush=True)
                     turnReward += 30
                     self.game_over = True
 
@@ -126,8 +125,6 @@ class Game:
         cy = y + dy
         rowCount = 0
         maxCount = 0
-        axisCount = [0, 0, 0, 0]
-        axis = 0
 
         # scan direction
         while True:
